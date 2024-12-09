@@ -1,0 +1,25 @@
+# Aliase for Repositories
+
+alias mg="~/MyGithub"
+alias mygithub="~/MyGithub"
+alias github="~/MyGithub"
+alias gr="~/GitRepo/"
+alias gitrepo="~/GitRepo/"
+alias lfiles="~/MyGithub/LinuxFiles"
+alias lf="~/MyGithub/LinuxFiles"
+alias mygithub="~/MyGithub"
+alias mg="~/MyGithub"
+alias sammlung="~/MyGithub/DieSammlung"
+alias ds="~/MyGithub/DieSammlung"
+alias books="~/MyGithub/WKDBooks"
+alias wb="~/MyGithub/WKDBooks"
+alias webapp="~/MyGithub/MyWebapp"
+alias gr="~/GitRepo/"
+alias work="~/GitRepo/"
+alias deskhoppers="~/GitRepo/deskhoppers"
+alias dh="~/GitRepo/deskhoppers"
+alias workrepo="~/GitRepo/WORK_REPO"
+alias wr="~/GitRepo/WORK_REPO"
+alias itrp="~/GitRepo/ITRP"
+alias work='cd ~/GitRepo/WORK_REPO'
+
