@@ -5,7 +5,8 @@ alias pushRepo="git add . && git commit -m \'Default\'"
 
 ## Git-Hooks
 alias gfetch="git fetch"
-alias gaddall="git add ."
-alias gcommitdefault="git commit -m 'Default commit'"
+alias gadd="git add ."
+alias gcommit="git commit -m 'Default commit'"
+alias gpush="git add . && git commit -m 'Default commit' && git push"
 alias gammend="git commit --amenmmend="git commit --amend"d"
 
