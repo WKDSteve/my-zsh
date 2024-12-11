@@ -8,6 +8,9 @@ alias npm-set-3s="npm config set registry https://registry.3sit.at/repository/ge
 alias deskhoppers-backend="cd ~/GitRepo/deskhoppers/packages/backend"
 alias deskhoppers-frontend="cd ~/GitRepo/deskhoppers/packages/frontend"
 alias deskhoppers="cd ~/GitRepo/deskhoppers"
+alias dh-backend="cd ~/GitRepo/deskhoppers/packages/backend"
+alias dh-frontend="cd ~/GitRepo/deskhoppers/packages/frontend"
+alias dh="cd ~/GitRepo/deskhoppers"
 
 ### Deskhoppers Docker
 alias dcompose="cd ~/GitRepo/deskhoppers && docker compose up -d"
