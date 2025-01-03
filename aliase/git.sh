@@ -8,5 +8,5 @@ alias gfetch="git fetch"
 alias gadd="git add ."
 alias gcommit="git commit -m 'Default commit'"
 alias gpush="git add . && git commit -m 'Default commit' && git push"
-alias gammend="git commit --amenmmend="git commit --amend"d"
-
+alias gamend="git commit --ammend"
+alias gamendf="git commit --amend --no-edit && git push --force-with-lease"

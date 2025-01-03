@@ -6,4 +6,4 @@ alias o='/usr/bin/xdg-open'
 alias ~='cd ~/'
 alias downloads='cd ~/Downloads'
 alias remove='rm -rf' # Alias für das sofortige Löschen ohne Bestätigung
-
+alias rmLast="fc -R; sed -i '' '$d' ~/.zsh_history && fc -W && source ~/.zshrc" # Löscht den letzten Eintrag in der History und updatet die History

@@ -9,3 +9,5 @@ alias less='less -M'
 export PATH="$PATH:$HOME/DevSoftware/john-jumbo/run"
 alias john="$HOME/DevSoftware/john-jumbo/run/john"
 
+## whisper
+alias translate-audio="whisper"
