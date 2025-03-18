@@ -1,13 +1,10 @@
 # Aliase for scripts
-
-alias m_scripts='~/MyGithub/LinuxFiles/MyBash/manage_scripts.sh'
-alias m_software='~/MyGithub/LinuxFiles/MyBash/manage_software.sh'
-alias install_pkg='~/MyGithub/LinuxFiles/MyBash/install_pkg.sh'
-alias m_git='~/MyGithub/LinuxFiles/MyBash/manage_git.sh'
-alias pdf_zu_bilder='~/MyGithub/LinuxFiles/MyPython/pdf_zu_bilder.py'
-alias relief='~/MyGithub/LinuxFiles/MyBash/relief.sh'
-alias updateServer='~/MyGithub/MyWebapp/sync_to_raspi.sh'
-alias e="exa"
-alias t="tmux"
-alias updateRepos="~/MyGithub/update_repos.sh"
-
+export GITHUB_DIR="/media/steve/Depot/MyGithub"
+alias m_scripts="~/$GITHUB_DIR/LinuxFiles/MyBash/manage_scripts.sh"
+alias m_software="~/$GITHUB_DIR/LinuxFiles/MyBash/manage_software.sh"
+alias install_pkg="~/$GITHUB_DIR/LinuxFiles/MyBash/install_pkg.sh"
+alias m_git="~/$GITHUB_DIR/LinuxFiles/MyBash/manage_git.sh"
+alias pdf_zu_bilder="~/$GITHUB_DIR/LinuxFiles/MyPython/pdf_zu_bilder.py"
+alias relief="~/$GITHUB_DIR/LinuxFiles/MyBash/relief.sh"
+alias updateServer="~/$GITHUB_DIR/MyWebapp/sync_to_raspi.sh"
+alias updateRepos="~/$GITHUB_DIR/update_repos.sh"
