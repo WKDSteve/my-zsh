@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
-# @name      show_conflicts.sh
 # @desc      Lists Git conflict files and displays all conflict sections with content
-# @usage     ./show_conflicts.sh
 
 show_conflicts() {
   # Fallback for mapfile in Zsh
@@ -11,11 +9,11 @@ show_conflicts() {
   done < <(git diff --name-only --diff-filter=U)
 
   if [[ ${#conflict_files[@]} -eq 0 ]]; then
-    echo "✅ No unresolved conflicts found."
+    echo "No unresolved conflicts found."
     return
   fi
 
-  echo "❌ Conflict files detected:"
+  echo "Conflict files detected:"
   echo "---------------------------"
   printf "%s\n" "${conflict_files[@]}"
   echo

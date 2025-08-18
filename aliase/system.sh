@@ -1,25 +1,60 @@
 # Aliase for System-related tasks
 
-alias source-zsh="source $HOME/.zshrc"
 alias updateOS='sudo apt-get update && sudo apt-get -y dist-upgrade && sudo apt upgrade -y && sudo apt-get autoclean && sudo apt-get update'
-alias o='/usr/bin/xdg-open'
-alias downloads='cd ~/Downloads'
-alias remove='rm -rf' # Alias für das sofortige Löschen ohne Bestätigung
-alias rmLastHistory="fc -R; sed -i '' '$d' ~/.zsh_history && fc -W && source ~/.zshrc" # Löscht den letzten Eintrag in der History und updatet die History
+#alias o='/usr/bin/xdg-open' # replaced from `o`-function (see /functions/system.sh)
 alias man="MANWIDTH=75 man"
-alias l.='ls -d .* --color=auto' # Creates a new command called l., which displays all directory entries that begin with a dot.
-alias ll='ls -l --color=auto' # Creates a new command called ll, which display a long-format directory listing.
-alias lls='ls --hyperlink --color=auto'
+alias ls='ls -l --hyperlink --color=auto'
 alias delta="delta --hyperlinks --hyperlinks-file-link-format='file://{path}#{line}'"
 alias rg='rg --hyperlink-format=kitty'
 
 # Aliases
-alias ff="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
-#alias ls='eza $eza_params'
-#alias l='eza --git-ignore $eza_params'
-#alias ll='eza --all --header --long $eza_params'
-#alias llm='eza --all --header --long --sort=modified $eza_params'
-#alias la='eza -lbhHigUmuSa'
-#alias lx='eza -lbhHigUmuSa@'
-#alias lt='eza --tree $eza_params'
-#alias tree='eza --tree $eza_params'
+alias fzf="fzf --style full --preview 'fzf-preview.sh {}' --bind 'focus:transform-header:file --brief {}'"
+
+# Guard: define aliases only if 'eza' is available
+if command -v eza >/dev/null 2>&1; then
+  # Helper: check if a long option is supported by this eza build
+  # Uses help text to avoid running eza with unsupported flags.
+  _eza_supports() {
+    # $1 is the long option (e.g. --icons)
+    eza --help 2>&1 | grep -q -- "$1"
+  }
+
+  # Build an array of safe default parameters based on feature detection.
+  # Works in bash and zsh (both support arrays).
+  eza_params=()
+
+  # Prefer grouped directories first (if supported)
+  if _eza_supports '--group-directories-first'; then
+    eza_params+=(--group-directories-first)
+  fi
+
+  # Icons (only if this build supports it)
+  if _eza_supports '--icons'; then
+    # Some builds accept values: auto|always|never; fallback to plain --icons if =auto not found
+    if eza --help 2>&1 | grep -q -- '--icons=auto'; then
+      eza_params+=(--icons=auto)
+    else
+      eza_params+=(--icons)
+    fi
+  fi
+
+  # Color handling (most builds have this; check anyway)
+  if _eza_supports '--color'; then
+    eza_params+=(--color=auto)
+  fi
+
+  # Header flag is widely supported; specific aliases may add it below.
+
+  # Use quotes to keep spaces intact when expanding the array
+  _EP() { printf '%s ' "${eza_params[@]}"; }
+
+  # Aliases with inline comments (English, as requested)
+
+  alias els="eza $(_EP)"                                # Short listing with safe defaults
+  alias el="eza --git-ignore $(_EP)"                    # Listing that respects .gitignore
+  alias ell="eza --all --header --long $(_EP)"          # Long listing of all entries with header
+  alias elm="eza --all --header --long --sort=modified $(_EP)"  # Long listing sorted by modification time
+  alias ela="eza -lbhHigUmuSa"                          # Rich long format (human sizes, inode, groups, etc.)
+  alias elx="eza -lbhHigUmuSa@"                         # Rich long format + extended attributes (@)
+  alias etree="eza --tree $(_EP)"                       # Tree view with safe defaults
+fi
