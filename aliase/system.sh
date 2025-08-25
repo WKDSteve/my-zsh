@@ -48,13 +48,13 @@ if command -v eza >/dev/null 2>&1; then
   # Use quotes to keep spaces intact when expanding the array
   _EP() { printf '%s ' "${eza_params[@]}"; }
 
-  # Aliases with inline comments (English, as requested)
+  # Aliases
 
-  alias els="eza $(_EP)"                                # Short listing with safe defaults
-  alias el="eza --git-ignore $(_EP)"                    # Listing that respects .gitignore
-  alias ell="eza --all --header --long $(_EP)"          # Long listing of all entries with header
-  alias elm="eza --all --header --long --sort=modified $(_EP)"  # Long listing sorted by modification time
-  alias ela="eza -lbhHigUmuSa"                          # Rich long format (human sizes, inode, groups, etc.)
-  alias elx="eza -lbhHigUmuSa@"                         # Rich long format + extended attributes (@)
-  alias etree="eza --tree $(_EP)"                       # Tree view with safe defaults
+  alias els="eza $(_EP)"                                       # Short listing with safe defaults
+  alias el="eza --git-ignore $(_EP)"                           # Listing that respects .gitignore
+  alias ell="eza --all --header --long $(_EP)"                 # Long listing of all entries with header
+  alias elm="eza --all --header --long --sort=modified $(_EP)" # Long listing sorted by modification time
+  alias ela="eza -lbhHigUmuSa"                                 # Rich long format (human sizes, inode, groups, etc.)
+  alias elx="eza -lbhHigUmuSa@"                                # Rich long format + extended attributes (@)
+  alias etree="eza --tree $(_EP)"                              # Tree view with safe defaults
 fi
