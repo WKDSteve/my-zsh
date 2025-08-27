@@ -1,5 +1,6 @@
-# Load shell integrations/plugins from a portable repo location (no oh-my-zsh dependency).
-#   Also supports Homebrew installs as a fallback. Pure zsh, idempotent sourcing.
+# File: $REPOS_DIR/my-zsh/integrations.zsh
+# Purpose: Load shell integrations/plugins from a portable repo location (no oh-my-zsh dependency).
+#          Also supports Homebrew installs as a fallback. Pure zsh, idempotent sourcing.
 
 # Guard: need zsh and repos
 [[ -n "${ZSH_VERSION-}" ]] || return 0
@@ -27,18 +28,18 @@ typeset -a __plug_roots
 __plug_roots=()
 [[ -n "$ZSH_PLUGIN_DIR" ]] && __plug_roots+=("$ZSH_PLUGIN_DIR")
 __plug_roots+=(
-  "$REPOS_DIR/Configs/Shells/oh-my-zsh/plugins"
+  "$REPOS_DIR/my-zsh/plugins"   # fixed: was "my-zhs"
   "$HOME/.zsh/plugins"
 )
 
 # Helper: join a plugin-relative path with the first existing root
 __from_roots() {
-  # Usage: __from_roots relative/path ...
+  # Usage: __from_roots relative/path
   # Returns: first existing readable file under any root (in declared order)
-  local rel="$1" root
+  local rel="$1" root cand
   for root in "${__plug_roots[@]}"; do
     [[ -n "$root" ]] || continue
-    local cand="$root/$rel"
+    cand="$root/$rel"
     [[ -f "$cand" && -r "$cand" ]] && print -r -- "$cand" && return 0
   done
   return 1
@@ -68,7 +69,18 @@ __safe_source() {
   fi
 }
 
-# Ensure completion is initialized (harmless if already done elsewhere)
+# ---------------------------------------
+# Completions before compinit (zsh-completions)
+# ---------------------------------------
+# Repo copy
+if [[ -d "$REPOS_DIR/my-zsh/plugins/zsh-completions/src" ]]; then
+  fpath=("$REPOS_DIR/my-zsh/plugins/zsh-completions/src" $fpath)
+# Brew fallback
+elif [[ -n "$__brew_prefix" && -d "$__brew_prefix/share/zsh-completions" ]]; then
+  fpath=("$__brew_prefix/share/zsh-completions" $fpath)
+fi
+
+# (Re)initialize completion cache (safe if done earlier)
 autoload -Uz compinit
 if [[ -n "${ZDOTDIR:-}" && -d "$ZDOTDIR" ]]; then
   compinit -C -d "$ZDOTDIR/.zcompdump"
@@ -76,9 +88,20 @@ else
   compinit -C -d "$HOME/.zcompdump"
 fi
 
+# ---------------------------------------
+# fzf-tab (repo plugin; Brew package usually not available)
+# ---------------------------------------
+if [[ -r "$REPOS_DIR/my-zsh/plugins/fzf-tab/fzf-tab.zsh" ]]; then
+  __safe_source "$REPOS_DIR/my-zsh/plugins/fzf-tab/fzf-tab.zsh"
+  # Recommended styles: avoid auto "menu select" because fzf-tab takes over
+  zstyle ':completion:*' menu no-select
+  zstyle ':fzf-tab:*' switch-group 'Alt-h' 'Alt-l'
+  zstyle ':fzf-tab:*' fzf-bindings 'space:toggle'
+fi
+
+# ---------------------------------------
 # zsh-vi-mode (prefer repo copy; then Homebrew)
-# Repo structures supported:
-#   plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+# ---------------------------------------
 zvm_file="$(__from_roots "zsh-vi-mode/zsh-vi-mode.plugin.zsh")"
 if [[ -z "$zvm_file" && -n "$__brew_prefix" ]]; then
   zvm_file="$(__first_readable \
@@ -93,10 +116,9 @@ else
 fi
 unset zvm_file
 
+# ---------------------------------------
 # zsh-autosuggestions
-# Repo structures supported:
-#   plugins/zsh-autosuggestions.zsh
-#   plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# ---------------------------------------
 zas_file="$(__from_roots "zsh-autosuggestions.zsh")"
 [[ -z "$zas_file" ]] && zas_file="$(__from_roots "zsh-autosuggestions/zsh-autosuggestions.zsh")"
 if [[ -z "$zas_file" && -n "$__brew_prefix" ]]; then
@@ -106,10 +128,9 @@ fi
 [[ -n "$zas_file" ]] && __safe_source "$zas_file"
 unset zas_file
 
-# zsh-syntax-highlighting (must be sourced last among highlighting engines)
-# Repo structures supported:
-#   plugins/zsh-syntax-highlighting.zsh
-#   plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# ---------------------------------------
+# zsh-syntax-highlighting (must be LAST among highlighters)
+# ---------------------------------------
 zshs_file="$(__from_roots "zsh-syntax-highlighting.zsh")"
 [[ -z "$zshs_file" ]] && zshs_file="$(__from_roots "zsh-syntax-highlighting/zsh-syntax-highlighting.zsh")"
 if [[ -z "$zshs_file" && -n "$__brew_prefix" ]]; then
@@ -119,12 +140,22 @@ fi
 [[ -n "$zshs_file" ]] && __safe_source "$zshs_file"
 unset zshs_file
 
+# ---------------------------------------
+# Other tool integrations
+# ---------------------------------------
 # fzf key bindings (installed by the fzf install script)
 __safe_source "$HOME/.fzf.zsh"
 
 # zoxide (smart cd)
 if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
+  # robust init with fallbacks
+  if ! eval "$(zoxide init zsh 2>/dev/null)"; then
+    if [[ -x "/home/linuxbrew/.linuxbrew/bin/zoxide" ]]; then
+      eval "$(/home/linuxbrew/.linuxbrew/bin/zoxide init zsh 2>/dev/null)" || true
+    elif [[ -x "/opt/homebrew/bin/zoxide" ]]; then
+      eval "$(/opt/homebrew/bin/zoxide init zsh 2>/dev/null)" || true
+    fi
+  fi
 fi
 
 # direnv (per-directory env)

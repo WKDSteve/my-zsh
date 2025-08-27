@@ -23,8 +23,9 @@ _src "$MY_ZSH_DIR/env-sources.zsh"
 # 3) Curated PATH (user bins → toolchains → brew → system)
 _src "$MY_ZSH_DIR/paths.zsh"
 
-# 4..7) Behavior, aliases, functions, integrations
+# 4..7) Behavior, aliases, functions, integrations, fishify
 _src "$MY_ZSH_DIR/behavior.zsh"
 _src "$MY_ZSH_DIR/aliases.zsh"
 _src "$MY_ZSH_DIR/functions.zsh"
 _src "$MY_ZSH_DIR/integrations.zsh"
+_src "$MY_ZSH_DIR/fishify.zsh"

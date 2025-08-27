@@ -29,11 +29,11 @@ else
 fi
 
 # 3) Prompt setup (with fallbacks)
-#    a) Starship (fast, cross-shell)
+#    a) Starship
 if command -v starship >/dev/null 2>&1; then
-  eval "$(starship init zsh)"
+   eval "$(starship init zsh)"
 
-#    b) oh-my-posh
+#    b) oh-my-posh  - make sure it is installed: brew install jandedobbeleer/oh-my-posh/oh-my-posh)
 elif command -v oh-my-posh >/dev/null 2>&1; then
   # Example themes (uncomment one):
   # eval "$(oh-my-posh init zsh --config "$(brew --prefix 2>/dev/null)"/themes/tokyo.omp.json)"
@@ -42,5 +42,5 @@ elif command -v oh-my-posh >/dev/null 2>&1; then
 
 #    c) Custom prompt
 else
-  # source ~/.oh-my-zsh/custom/prompt/my_prompt.zsh
+   source "$REPOS_DIR/my-zsh/custom/prompt/my_prompt.zsh"
 fi
