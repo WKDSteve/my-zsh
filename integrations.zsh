@@ -1,9 +1,9 @@
 # Load shell integrations/plugins from a portable repo location (no oh-my-zsh dependency).
 #   Also supports Homebrew installs as a fallback. Pure zsh, idempotent sourcing.
 
-# Guard: need zsh and MYGITHUB
+# Guard: need zsh and repos
 [[ -n "${ZSH_VERSION-}" ]] || return 0
-: "${MYGITHUB:?Please export MYGITHUB (e.g., /mnt/steve/MyGithub)}"
+: "${REPOS_DIR:?Please export repos (e.g., /mnt/steve/repos)}"
 
 # Debug toggle: export MYZSH_DEBUG=1 to see which files are sourced
 : "${MYZSH_DEBUG:=0}"
@@ -20,14 +20,14 @@ __first_readable() {
 
 # Resolve candidate plugin roots (highest priority first)
 # 1) Explicit override via $ZSH_PLUGIN_DIR
-# 2) Repo path under $MYGITHUB
+# 2) Repo path under $REPOS_DIR
 # 3) User-local fallback
 : "${ZSH_PLUGIN_DIR:=}"
 typeset -a __plug_roots
 __plug_roots=()
 [[ -n "$ZSH_PLUGIN_DIR" ]] && __plug_roots+=("$ZSH_PLUGIN_DIR")
 __plug_roots+=(
-  "$MYGITHUB/Configs/Shells/oh-my-zsh/plugins"
+  "$REPOS_DIR/Configs/Shells/oh-my-zsh/plugins"
   "$HOME/.zsh/plugins"
 )
 

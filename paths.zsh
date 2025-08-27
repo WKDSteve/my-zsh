@@ -1,10 +1,10 @@
 # --- Centralized PATH management (zsh) ---
 # Build a clean, deduplicated PATH in a well-defined order.
 
-# Require MYGITHUB (abort if missing); warn if directory not present
-: "${MYGITHUB:?Please set MYGITHUB to your repo root, e.g. /mnt/steve/MyGithub}"
-if [[ ! -d "$MYGITHUB" ]]; then
-  print -u2 "Warning: MYGITHUB points to a non-existent directory: $MYGITHUB"
+# Require repos (abort if missing); warn if directory not present
+: "${REPOS_DIR:?Please set repos to your repo root, e.g. /mnt/steve/repos}"
+if [[ ! -d "$REPOS_DIR" ]]; then
+  print -u2 "Warning: repos points to a non-existent directory: $REPOS_DIR"
 fi
 
 # Ensure 'path' is a unique array and export PATH
@@ -27,7 +27,7 @@ add_if_dir() {
 # User bins (highest priority)
 add_if_dir "$HOME/.local/bin"
 add_if_dir "$HOME/bin"
-add_if_dir "$MYGITHUB/bin"
+add_if_dir "$REPOS_DIR/bin"
 add_if_dir "$HOME/nvim-linux64/bin"
 add_if_dir "$HOME/perl5/bin"
 

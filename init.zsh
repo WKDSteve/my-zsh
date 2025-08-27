@@ -1,9 +1,9 @@
 # Entry point to load repo-based zsh config on any machine.
 # Order: 1) secrets  2) env initializers  3) PATH  4) behavior  5) aliases  6) functions  7) integrations
 
-# Guard: require MYGITHUB (set this in ~/.zshenv)
-: "${MYGITHUB:?Please export MYGITHUB, e.g. /mnt/steve/MyGithub}"
-MY_ZSH_DIR="$MYGITHUB/my-zsh"
+# Guard: require repos (set this in ~/.zshenv)
+: "${REPOS_DIR:?Please export repos, e.g. /mnt/steve/repos}"
+MY_ZSH_DIR="$REPOS_DIR/my-zsh"
 
 # Helper: source-if-readable
 _src() {
