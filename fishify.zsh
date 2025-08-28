@@ -142,18 +142,29 @@ typeset -gA FISH_ABBR
 # Expansion widget: replace the word before cursor if it matches a key
 _fish_abbr_expand() {
   setopt localoptions noshwordsplit
-  local L="${#LBUFFER}" R="${#RBUFFER}" cur word start end
-  cur=$L
-  # Find word boundaries around cursor
-  zle backward-word; start=$(( ${#LBUFFER} )); zle forward-word; end=$(( ${#LBUFFER} ))
-  # Restore original cursor position
+  # integers for safe arithmetic
+  local -i cur start end s e
+  local word left right
+
+  cur=$CURSOR
+  zle backward-word; start=$#LBUFFER
+  zle forward-word;  end=$#LBUFFER
   CURSOR=$cur
-  # Extract current word
-  word="${BUFFER:start:end-start}"
-  # If there is an abbreviation, replace it
-  if [[ -n "${FISH_ABBR[$word]-}" ]]; then
-    BUFFER="${BUFFER:0:start}${FISH_ABBR[$word]}${BUFFER:end}"
-    CURSOR=$(( start + ${#FISH_ABBR[$word]} ))
+
+  # zsh slices are 1-based and inclusive: ${BUFFER[begin,end]}
+  s=$(( start + 1 ))
+  e=$end
+  (( e >= s )) || return 0
+
+  # current word under cursor
+  word="${BUFFER[$s,$e]}"
+
+  # expand if abbreviation defined
+  if [[ -n ${FISH_ABBR[$word]-} ]]; then
+    left="${BUFFER[1,$((s-1))]}"
+    right="${BUFFER[$((e+1)),-1]}"
+    BUFFER="${left}${FISH_ABBR[$word]}${right}"
+    CURSOR=$(( ${#left} + ${#FISH_ABBR[$word]} ))
   fi
 }
 
