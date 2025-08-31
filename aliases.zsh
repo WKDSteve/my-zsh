@@ -16,6 +16,9 @@ if command -v delta >/dev/null 2>&1; then
   alias delta="delta --hyperlinks --hyperlinks-file-link-format='file://{path}#{line}'"
 fi
 
+# batcat
+alias bat="batcat"
+
 # eza integration (feature-detected flags)
 if command -v eza >/dev/null 2>&1; then
   _eza_supports() { eza --help 2>&1 | grep -q -- "$1"; }
