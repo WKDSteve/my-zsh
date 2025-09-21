@@ -1,5 +1,13 @@
 # Utility functions (portable across Linux/macOS).
 
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
+
 # Cross-platform opener 'o' with solid WSL fallbacks
 o() {
   local args=("$@")

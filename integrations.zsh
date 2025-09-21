@@ -158,6 +158,51 @@ if command -v zoxide >/dev/null 2>&1; then
   fi
 fi
 
+# Ensure completion function and compdef are present even if init script changed names
+# 1) prefer _zoxide_z (historical), else try any _zoxide* match
+if (( $+functions[_zoxide_z] )); then
+  compdef _zoxide_z z 2>/dev/null
+else
+  # Fallback: try to find a zoxide completion function by pattern
+  for __zf in ${(k)functions}; do
+    case "$__zf" in
+      _zoxide(|_z|_cd) )
+        compdef "$__zf" z 2>/dev/null
+        break
+        ;;
+    esac
+  done
+fi
+unset __zf
+
+# zoxide (smart cd)
+if command -v zoxide >/dev/null 2>&1; then
+  # robust init with fallbacks
+  if ! eval "$(zoxide init zsh 2>/dev/null)"; then
+    if [[ -x "/home/linuxbrew/.linuxbrew/bin/zoxide" ]]; then
+      eval "$(/home/linuxbrew/.linuxbrew/bin/zoxide init zsh 2>/dev/null)" || true
+    elif [[ -x "/opt/homebrew/bin/zoxide" ]]; then
+      eval "$(/opt/homebrew/bin/zoxide init zsh 2>/dev/null)" || true
+    fi
+  fi
+
+  # ensure completion for alias `z`
+  if (( $+functions[_zoxide_z] )); then
+    compdef _zoxide_z z 2>/dev/null
+  else
+    for __zf in ${(k)functions}; do
+      case "$__zf" in
+        _zoxide(|_z|_cd) )
+          compdef "$__zf" z 2>/dev/null
+          break
+          ;;
+      esac
+    done
+    unset __zf
+  fi
+fi
+
+
 # direnv (per-directory env)
 if command -v direnv >/dev/null 2>&1; then
   eval "$(direnv hook zsh)"
