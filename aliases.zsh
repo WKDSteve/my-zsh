@@ -1,5 +1,15 @@
 # Aliases
 
+# Make a single "-" run "cd .." when used as a standalone command.
+# Notes:
+# - This does NOT affect uses like "cat -"; aliases expand only for the first word.
+# - "cd -" (jump to previous dir) still works, because the command is "cd", not "-".
+# - We explicitly unalias first to avoid duplicate definitions.
+if [[ -o interactive ]]; then
+  unalias - 2>/dev/null || true
+  alias -- -='cd ..'
+fi
+
 # Safer package update (only on Debian/Ubuntu)
 if command -v apt-get >/dev/null 2>&1; then
   alias updateOS='sudo apt-get update && sudo apt-get -y dist-upgrade && sudo apt upgrade -y && sudo apt-get autoclean && sudo apt-get update'
