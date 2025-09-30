@@ -119,11 +119,6 @@ if [[ -d "$MYZ_PLUGINS_DIR/zsh-autosuggestions" ]]; then
 fi
 
 
-# zsh-syntax-highlighting MUST be the last thing affecting highlighting
-if [[ -d "$MYZ_PLUGINS_DIR/zsh-syntax-highlighting" ]]; then
-  _myz_source_plugin_dir "$MYZ_PLUGINS_DIR/zsh-syntax-highlighting"
-fi
-
 # ------------------------------------------------------------------------------
 # 5) Vi mode core + deferred indicator (after prompt engines)
 # ------------------------------------------------------------------------------
@@ -148,7 +143,16 @@ __myz_vi_indicator_setup_once() {
 add-zsh-hook -U precmd __myz_vi_indicator_setup_once
 
 # ------------------------------------------------------------------------------
-# 6) Language/tool shims (optional, gated by availability)
+# 6) zsh-syntax-highlighting
+# ------------------------------------------------------------------------------
+
+# zsh-syntax-highlighting MUST be the last thing affecting highlighting
+if [[ -d "$MYZ_PLUGINS_DIR/zsh-syntax-highlighting" ]]; then
+  _myz_source_plugin_dir "$MYZ_PLUGINS_DIR/zsh-syntax-highlighting"
+fi
+
+# ------------------------------------------------------------------------------
+# 7) Language/tool shims (optional, gated by availability)
 # ------------------------------------------------------------------------------
 # autojump
 if [[ -r "$MYZ_PLUGINS_DIR/autojump.zsh" && -x "$(command -v autojump 2>/dev/null)" ]]; then
@@ -168,10 +172,10 @@ _src "$MYZ_PLUGINS_DIR/ruby.zsh"
 _src "$MYZ_PLUGINS_DIR/rust.zsh"
 
 # ------------------------------------------------------------------------------
-# 7) Final niceties
+# 8) Final niceties
 # ------------------------------------------------------------------------------
 
-#_src "$MY_ZSH_DIR/fishify.zsh"
+# _src "$MY_ZSH_DIR/fishify.zsh"
 
 # Make sure $KEYTIMEOUT is reasonable for vi-mode sequences
 : ${KEYTIMEOUT:=15}
