@@ -100,6 +100,40 @@ if [[ -r "$REPOS_DIR/my-zsh/plugins/fzf-tab/fzf-tab.zsh" ]]; then
 fi
 
 # ---------------------------------------
+# fzf integtration
+# ---------------------------------------
+# Candidate shells in priority order:
+typeset -a _fzf_shells
+_fzf_shells=(
+  "$HOME/.fzf/shell"                 # user git install (Linux/macOS/WSL)
+  "/usr/share/fzf"                   # Debian/Ubuntu/Arch (key-bindings.zsh, completion.zsh)
+  "/usr/share/doc/fzf/examples"      # some distros put examples here
+)
+
+# Homebrew fallback (macOS or Linuxbrew)
+if command -v brew >/dev/null 2>&1; then
+  _fzf_shells=(
+    "$(brew --prefix fzf 2>/dev/null)/shell"
+    "${_fzf_shells[@]}"
+  )
+fi
+
+# Source completion before key-bindings; guard by readability/interactive
+for _d in "${_fzf_shells[@]}"; do
+  if [[ -r "$_d/completion.zsh" && $- == *i* ]]; then
+    __safe_source "$_d/completion.zsh"
+    _fzf_comp_loaded=1
+  fi
+  if [[ -r "$_d/key-bindings.zsh" ]]; then
+    __safe_source "$_d/key-bindings.zsh"
+    _fzf_bind_loaded=1
+  fi
+  [[ -n "${_fzf_bind_loaded}${_fzf_comp_loaded}" ]] && break
+done
+
+unset _fzf_shells _fzf_bind_loaded _fzf_comp_loaded
+
+# ---------------------------------------
 # zsh-vi-mode (prefer repo copy; then Homebrew)
 # ---------------------------------------
 zvm_file="$(__from_roots "zsh-vi-mode/zsh-vi-mode.plugin.zsh")"
@@ -143,20 +177,6 @@ unset zshs_file
 # ---------------------------------------
 # Other tool integrations
 # ---------------------------------------
-# fzf key bindings (installed by the fzf install script)
-__safe_source "$HOME/.fzf.zsh"
-
-# zoxide (smart cd)
-if command -v zoxide >/dev/null 2>&1; then
-  # robust init with fallbacks
-  if ! eval "$(zoxide init zsh 2>/dev/null)"; then
-    if [[ -x "/home/linuxbrew/.linuxbrew/bin/zoxide" ]]; then
-      eval "$(/home/linuxbrew/.linuxbrew/bin/zoxide init zsh 2>/dev/null)" || true
-    elif [[ -x "/opt/homebrew/bin/zoxide" ]]; then
-      eval "$(/opt/homebrew/bin/zoxide init zsh 2>/dev/null)" || true
-    fi
-  fi
-fi
 
 # Ensure completion function and compdef are present even if init script changed names
 # 1) prefer _zoxide_z (historical), else try any _zoxide* match

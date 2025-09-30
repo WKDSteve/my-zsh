@@ -44,3 +44,12 @@ elif command -v oh-my-posh >/dev/null 2>&1; then
 else
    source "$REPOS_DIR/my-zsh/custom/prompt/my_prompt.zsh"
 fi
+
+# 4) Append vi-mode indicator AFTER the prompt engine (starship/oh-my-posh/custom)
+if [[ -r "$REPOS_DIR/my-zsh/zsh-vi-mode-indicator.zsh" ]]; then
+  # Optional toggles:
+  # MYZ_VI_CURSOR_ON=0   # keep 0 unless du sicher bist, dass dein Terminal DECSCUSR sauber kann
+  # MYZ_VI_TAG_STYLE=1   # 1=colored, 0=plain
+  source "$REPOS_DIR/my-zsh/zsh-vi-mode-indicator.zsh"
+fi
+

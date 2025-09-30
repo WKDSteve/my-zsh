@@ -5,6 +5,14 @@
 : "${REPOS_DIR:?Please export repos, e.g. /mnt/steve/repos}"
 MY_ZSH_DIR="$REPOS_DIR/my-zsh"
 
+# Derive repository root (MYZ_ROOT) once, robust to symlinks and $REPOS_DIR
+emulate -L zsh
+typeset -g MYZ_ROOT
+if [[ -z "${MYZ_ROOT:-}" ]]; then
+  # %N = path of current file when sourced; :A = absolute; :h = dirname
+  MYZ_ROOT="${${(%):-%N}:A:h}"
+fi
+
 # Helper: source-if-readable
 _src() {
   # $1 = absolute path to a file to source if readable
@@ -27,5 +35,6 @@ _src "$MY_ZSH_DIR/paths.zsh"
 _src "$MY_ZSH_DIR/behavior.zsh"
 _src "$MY_ZSH_DIR/aliases.zsh"
 _src "$MY_ZSH_DIR/functions.zsh"
+_src "$MY_ZSH_DIR/plugins/init.zsh"
 _src "$MY_ZSH_DIR/integrations.zsh"
 _src "$MY_ZSH_DIR/fishify.zsh"

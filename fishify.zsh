@@ -19,9 +19,9 @@ typeset -g __FISHIFY_LOADED=1
 # 0) Keymap: fish defaults are Emacs-like (not vi).
 #    Keep vi-mode if already active; otherwise switch to Emacs keybindings.
 # ----------------------------
-if [[ -z "${_ZVM_LOADED:-}" ]]; then
-  bindkey -e
-fi
+# if [[ -z "${_ZVM_LOADED:-}" ]]; then
+#   bindkey -e
+# fi
 
 # ----------------------------
 # 1) Autosuggestions similar to fish (dim gray)
@@ -118,8 +118,7 @@ if ! command -v starship >/dev/null 2>&1; then
   # Left prompt
   local _ssh=''
   [[ -n "$SSH_CONNECTION" ]] && _ssh='%F{cyan}%n@%m%f '
-  PROMPT='${_ssh}%F{blue}$(fishify_pwd)%f %F{green}$(git_branch)%f
-%# '
+  PROMPT='${_ssh}%F{blue}$(fishify_pwd)%f %F{green}$(git_branch)%f %# '
 
   # Right prompt: show exit code if non-zero and time
   RPROMPT='%F{red}%(?..%?)%f %F{yellow}%*%f'

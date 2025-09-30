@@ -44,6 +44,7 @@ git submodule add https://github.com/zsh-users/zsh-autosuggestions.git zsh-autos
 
 # Vi mode
 git submodule add https://github.com/jeffreytse/zsh-vi-mode.git zsh-vi-mode
+# !!! copy plugins/indicator  to zsh-vi-mode folder !!!!
 
 # Extra completions (optional but recommended)
 git submodule add https://github.com/zsh-users/zsh-completions.git zsh-completions
