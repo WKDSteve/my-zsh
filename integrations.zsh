@@ -28,7 +28,7 @@ typeset -a __plug_roots
 __plug_roots=()
 [[ -n "$ZSH_PLUGIN_DIR" ]] && __plug_roots+=("$ZSH_PLUGIN_DIR")
 __plug_roots+=(
-  "$REPOS_DIR/my-zsh/plugins"   # fixed: was "my-zhs"
+  "$REPOS_DIR/my-zsh/plugins"
   "$HOME/.zsh/plugins"
 )
 
