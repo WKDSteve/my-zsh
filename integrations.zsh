@@ -70,25 +70,6 @@ __safe_source() {
 }
 
 # ---------------------------------------
-# Completions before compinit (zsh-completions)
-# ---------------------------------------
-# Repo copy
-if [[ -d "$REPOS_DIR/my-zsh/plugins/zsh-completions/src" ]]; then
-  fpath=("$REPOS_DIR/my-zsh/plugins/zsh-completions/src" $fpath)
-# Brew fallback
-elif [[ -n "$__brew_prefix" && -d "$__brew_prefix/share/zsh-completions" ]]; then
-  fpath=("$__brew_prefix/share/zsh-completions" $fpath)
-fi
-
-# (Re)initialize completion cache (safe if done earlier)
-autoload -Uz compinit
-if [[ -n "${ZDOTDIR:-}" && -d "$ZDOTDIR" ]]; then
-  compinit -C -d "$ZDOTDIR/.zcompdump"
-else
-  compinit -C -d "$HOME/.zcompdump"
-fi
-
-# ---------------------------------------
 # fzf-tab (repo plugin; Brew package usually not available)
 # ---------------------------------------
 if [[ -r "$REPOS_DIR/my-zsh/plugins/fzf-tab/fzf-tab.zsh" ]]; then
@@ -133,46 +114,6 @@ done
 
 unset _fzf_shells _fzf_bind_loaded _fzf_comp_loaded
 
-# ---------------------------------------
-# zsh-vi-mode (prefer repo copy; then Homebrew)
-# ---------------------------------------
-zvm_file="$(__from_roots "zsh-vi-mode/zsh-vi-mode.plugin.zsh")"
-if [[ -z "$zvm_file" && -n "$__brew_prefix" ]]; then
-  zvm_file="$(__first_readable \
-    "$__brew_prefix/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh" \
-    "$__brew_prefix/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh")"
-fi
-if [[ -n "$zvm_file" ]]; then
-  __safe_source "$zvm_file"
-  typeset -g _ZVM_LOADED=1
-else
-  bindkey -v  # fallback to vi keybindings
-fi
-unset zvm_file
-
-# ---------------------------------------
-# zsh-autosuggestions
-# ---------------------------------------
-zas_file="$(__from_roots "zsh-autosuggestions.zsh")"
-[[ -z "$zas_file" ]] && zas_file="$(__from_roots "zsh-autosuggestions/zsh-autosuggestions.zsh")"
-if [[ -z "$zas_file" && -n "$__brew_prefix" ]]; then
-  zas_file="$(__first_readable \
-    "$__brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh")"
-fi
-[[ -n "$zas_file" ]] && __safe_source "$zas_file"
-unset zas_file
-
-# ---------------------------------------
-# zsh-syntax-highlighting (must be LAST among highlighters)
-# ---------------------------------------
-zshs_file="$(__from_roots "zsh-syntax-highlighting.zsh")"
-[[ -z "$zshs_file" ]] && zshs_file="$(__from_roots "zsh-syntax-highlighting/zsh-syntax-highlighting.zsh")"
-if [[ -z "$zshs_file" && -n "$__brew_prefix" ]]; then
-  zshs_file="$(__first_readable \
-    "$__brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh")"
-fi
-[[ -n "$zshs_file" ]] && __safe_source "$zshs_file"
-unset zshs_file
 
 # ---------------------------------------
 # Other tool integrations

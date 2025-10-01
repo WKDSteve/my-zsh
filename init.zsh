@@ -57,12 +57,12 @@ _src "$MY_ZSH_DIR/integrations.zsh"
 # ------------------------------------------------------------------------------
 # 3) Completion stack (zsh-completions → compinit → fzf-tab)
 # ------------------------------------------------------------------------------
-# Put zsh-completions on fpath BEFORE compinit
+# 3.1) Put zsh-completions on fpath BEFORE compinit
 if [[ -d "$MYZ_PLUGINS_DIR/zsh-completions" ]]; then
   fpath=("$MYZ_PLUGINS_DIR/zsh-completions/src" $fpath)
 fi
 
-# Fast/robust compinit with cache
+# 3.2) Fast/robust compinit with cache
 autoload -Uz compinit
 # Use XDG cache if available
 local compdump_base="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
@@ -75,7 +75,7 @@ if [[ -z "${MYZ_COMPINIT_DONE:-}" ]]; then
   typeset -g MYZ_COMPINIT_DONE=1
 fi
 
-# fzf-tab (must be AFTER compinit)
+# 3.3) fzf-tab (must be AFTER compinit)
 if [[ -d "$MYZ_PLUGINS_DIR/fzf-tab" ]]; then
   # complist for nice menu-select
   zmodload -F zsh/complist +b:menuselect 2>/dev/null || zmodload zsh/complist 2>/dev/null
@@ -86,7 +86,7 @@ if [[ -d "$MYZ_PLUGINS_DIR/fzf-tab" ]]; then
   zstyle ':fzf-tab:*' switch-group ',' '.'
 fi
 
-# Extra: colored man pages early (no ZLE deps)
+# 3.4) Extra: colored man pages early (no ZLE deps)
 _src "$MYZ_PLUGINS_DIR/colored-man-pages.zsh"
 
 # ------------------------------------------------------------------------------
@@ -118,29 +118,11 @@ if [[ -d "$MYZ_PLUGINS_DIR/zsh-autosuggestions" ]]; then
   source "$MYZ_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
 
-
-# ------------------------------------------------------------------------------
-# 5) Vi mode core + deferred indicator (after prompt engines)
-# ------------------------------------------------------------------------------
-# Load vi-mode after completion/suggestions/highlighting
-if [[ -d "$MYZ_PLUGINS_DIR/zsh-vi-mode" ]]; then
-  # Safe defaults (avoid tricky cursor sequences on some terminals)
-  : ${ZVM_VI_ESCAPE_BINDKEY:=jk}     # quick escape in insert-mode
-  : ${ZVM_LINE_INIT_MODE:=viins}     # start in insert
-  _myz_source_plugin_dir "$MYZ_PLUGINS_DIR/zsh-vi-mode"
-fi
-
-# Defer the indicator until AFTER the prompt engine (starship/oh-my-posh/custom) is initialized.
-# We'll hook precmd once and source the indicator then.
-autoload -Uz add-zsh-hook
-__myz_vi_indicator_setup_once() {
-  [[ -n "${MYZ_VI_INDICATOR_DONE:-}" ]] && return 0
-  if [[ -r "$MYZ_PLUGINS_DIR/zsh-vi-mode-indicator.zsh" ]]; then
-    source "$MYZ_PLUGINS_DIR/zsh-vi-mode-indicator.zsh"
-  fi
-  typeset -g MYZ_VI_INDICATOR_DONE=1
-}
-add-zsh-hook -U precmd __myz_vi_indicator_setup_once
+# ---------------------------------------
+# 5) zsh-vi-mode (prefer repo copy; then Homebrew)
+# ---------------------------------------
+#
+# ! NOT IMPLEMENTED AT THE MOMENT !
 
 # ------------------------------------------------------------------------------
 # 6) zsh-syntax-highlighting
@@ -154,22 +136,22 @@ fi
 # ------------------------------------------------------------------------------
 # 7) Language/tool shims (optional, gated by availability)
 # ------------------------------------------------------------------------------
-# autojump
-if [[ -r "$MYZ_PLUGINS_DIR/autojump.zsh" && -x "$(command -v autojump 2>/dev/null)" ]]; then
-  source "$MYZ_PLUGINS_DIR/autojump.zsh"
-fi
-
-# sudo goodness (e.g., !!, fix-dirty perms helpers)
-_src "$MYZ_PLUGINS_DIR/sudo.zsh"
-
-# Ruby / RVM (only if present)
-if [[ -r "$MYZ_PLUGINS_DIR/rvm.zsh" && -x "$(command -v rvm 2>/dev/null)" ]]; then
-  source "$MYZ_PLUGINS_DIR/rvm.zsh"
-fi
-_src "$MYZ_PLUGINS_DIR/ruby.zsh"
-
-# Rust (rustup/cargo – file can be lightweight env glue)
-_src "$MYZ_PLUGINS_DIR/rust.zsh"
+# # autojump
+# if [[ -r "$MYZ_PLUGINS_DIR/autojump.zsh" && -x "$(command -v autojump 2>/dev/null)" ]]; then
+#   source "$MYZ_PLUGINS_DIR/autojump.zsh"
+# fi
+#
+# # sudo goodness (e.g., !!, fix-dirty perms helpers)
+# _src "$MYZ_PLUGINS_DIR/sudo.zsh"
+#
+# # Ruby / RVM (only if present)
+# if [[ -r "$MYZ_PLUGINS_DIR/rvm.zsh" && -x "$(command -v rvm 2>/dev/null)" ]]; then
+#   source "$MYZ_PLUGINS_DIR/rvm.zsh"
+# fi
+# _src "$MYZ_PLUGINS_DIR/ruby.zsh"
+#
+# # Rust (rustup/cargo – file can be lightweight env glue)
+# _src "$MYZ_PLUGINS_DIR/rust.zsh"
 
 # ------------------------------------------------------------------------------
 # 8) Final niceties
@@ -178,7 +160,7 @@ _src "$MYZ_PLUGINS_DIR/rust.zsh"
 # _src "$MY_ZSH_DIR/fishify.zsh"
 
 # Make sure $KEYTIMEOUT is reasonable for vi-mode sequences
-: ${KEYTIMEOUT:=15}
+# : ${KEYTIMEOUT:=15}
 
 # Quiet completion errors
 setopt no_list_beep
