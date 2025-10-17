@@ -1,0 +1,23 @@
+# Shell scripts and zsh files: always use LF in repo and on checkout
+*.sh     text eol=lf
+*.zsh    text eol=lf
+
+# Common code files: prefer LF
+*.py     text eol=lf
+*.rb     text eol=lf
+*.js     text eol=lf
+*.ts     text eol=lf
+*.lua    text eol=lf
+
+# Windows text files that should be CRLF on checkout (optional)
+# *.ps1   text eol=crlf
+
+# Binary files: mark explicitly as binary
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gz     binary
+*.zip    binary
+
+# Catch-all for other text files to be normalized to LF
+* text=auto
