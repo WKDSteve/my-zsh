@@ -6,7 +6,7 @@
 export REPOS_DIR="/mnt/e/repos"
 
 3) Create a symlink from my-zsh/.zshrc to $HOME (force overwrite if ~/.zshrc exists)
-ln -sf /mnt/e/repos/my-zsh/.zshrc "$HOME/.zshrc"
+ln -sf $HOME/repos/my-zsh/.zshrc "$HOME/.zshrc"
 
 4) [Plugins install instructions](./plugins/INSTALL.md)
 

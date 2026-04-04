@@ -4,6 +4,8 @@
 # This file keeps the login minimal and delegates configuration
 # to $REPOS_DIR/my-zsh. It is safe for Linux/macOS and WSL.
 
+export REPOS_DIR="$HOME/repos"
+
 # 0) Only proceed for interactive shells
 [[ -o interactive ]] || return
 
