@@ -45,6 +45,7 @@ _myz_source_plugin_dir() {
 _src "$MY_ZSH_DIR/secrets.zsh"        # API keys etc.
 _src "$MY_ZSH_DIR/env-sources.zsh"    # rustup, deno, brew … (idempotent)
 _src "$MY_ZSH_DIR/paths.zsh"          # curated PATH
+_src "$MY_ZSH_DIR/custom/wsl_links.zsh"
 
 # ------------------------------------------------------------------------------
 # 2) Behavior / aliases / functions / integrations (repo-local)
