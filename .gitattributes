@@ -20,4 +20,4 @@
 *.zip    binary
 
 # Catch-all for other text files to be normalized to LF
-* text=auto
+* text=auto eol=lf
