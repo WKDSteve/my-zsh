@@ -53,6 +53,7 @@ _src "$MY_ZSH_DIR/custom/wsl_links.zsh"
 _src "$MY_ZSH_DIR/behavior.zsh"
 _src "$MY_ZSH_DIR/aliases.zsh"
 _src "$MY_ZSH_DIR/functions.zsh"
+_src "$MY_ZSH_DIR/repos.zsh"          # Repo-Sprung aus $REPOS_DIR
 _src "$MY_ZSH_DIR/integrations.zsh"
 
 # ------------------------------------------------------------------------------
